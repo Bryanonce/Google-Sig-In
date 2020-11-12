@@ -46,6 +46,7 @@ app.post('/login', (req, res) => {
 
 //GOOGLE CONFIG
 async function verify(token) {
+    console.log(process.env.CLIENT_ID);
     const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.CLIENT_ID
