@@ -66,6 +66,8 @@ app.post('/google', async(req, res) => {
         .catch((err) => {
             return res.status(403).json({
                 ok: false,
+                message: 'Hemos perdido :(',
+                clave: process.env.CLIENTE_GOOGLE,
                 err
             })
         })
