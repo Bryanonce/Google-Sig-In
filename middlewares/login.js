@@ -1,4 +1,5 @@
 //Imports
+require('../config/config');
 const jwt = require('jsonwebtoken');
 
 //===================
