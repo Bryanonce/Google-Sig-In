@@ -67,7 +67,6 @@ app.post('/google', async(req, res) => {
             return res.status(403).json({
                 ok: false,
                 message: 'Hemos perdido :(',
-                clave: process.env.CLIENTE_GOOGLE,
                 err: err
             })
         })
@@ -78,6 +77,9 @@ app.post('/google', async(req, res) => {
                 err
             });
         };
+        res.json({
+            usuario: usuarioDb
+        })
         if (usuarioDb) {
             if (usuarioDb.google === false) {
                 return res.status(400).json({
