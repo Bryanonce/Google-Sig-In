@@ -1,5 +1,4 @@
 //Imports
-require('../config/config');
 const express = require('express');
 const app = express()
 const Usuario = require('../models/usuarios');
@@ -7,7 +6,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.CLIENT_ID);
+const client = new OAuth2Client(process.env.CLIENTE_GOOGLE);
 //Cuerpo
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -46,10 +45,9 @@ app.post('/login', (req, res) => {
 
 //GOOGLE CONFIG
 async function verify(token) {
-    console.log(process.env.CLIENT_ID);
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: process.env.CLIENT_ID
+        audience: process.env.CLIENTE_GOOGLE
     });
     const payload = ticket.getPayload();
     console.log(payload.name);
