@@ -68,7 +68,7 @@ app.post('/google', async(req, res) => {
                 ok: false,
                 message: 'Hemos perdido :(',
                 clave: process.env.CLIENTE_GOOGLE,
-                err
+                err: err
             })
         })
     Usuario.findOne({ email: googleUser.email }, (err, usuarioDb) => {
