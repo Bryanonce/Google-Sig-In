@@ -40,8 +40,25 @@ let validarRol = (req, res, next) => {
 
 }
 
-//Exports
+//===================
+//  HTTPS GOOGLE
+//===================
+let googleMid = (req, res, next) => {
+        if (!(process.env.NODE_ENV === "dev")) {
+            const reqType = req.headers["x-forwarded-proto"];
+            // if not https redirect to https unless logging in using OAuth
+            if (reqType !== "https") {
+                req.url.indexOf("auth/google") !== -1 ?
+                    next() :
+                    res.redirect("https://" + req.headers.host + req.url);
+            }
+        } else {
+            next();
+        }
+    }
+    //Exports
 module.exports = {
     validacionToken,
-    validarRol
+    validarRol,
+    googleMid
 }

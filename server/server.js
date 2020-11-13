@@ -7,7 +7,7 @@ const path = require('path');
 //Cuerpo
 
 
-app.use(function(req, res, next) {
+/*app.use(function(req, res, next) {
     if (process.env.NODE_ENV === "production") {
         const reqType = req.headers["x-forwarded-proto"];
         // if not https redirect to https unless logging in using OAuth
@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
     } else {
         next();
     }
-});
+});*/
 
 app.use(require('../rutas/index'))
 console.log('Servidor Activo')
