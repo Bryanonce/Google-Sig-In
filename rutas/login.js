@@ -77,9 +77,6 @@ app.post('/google', async(req, res) => {
                 err
             });
         };
-        res.json({
-            usuario: usuarioDb
-        })
         if (usuarioDb) {
             if (usuarioDb.google === false) {
                 return res.status(400).json({
