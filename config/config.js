@@ -11,7 +11,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 //=====================
 //    TOKEN DOWN
 //=====================
-process.env.CAD_TOKEN = '24h'
+process.env.CAD_TOKEN = 60 * 60 * 24 * 30;
 
 //=====================
 //   SEED de auth

@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 //Cuerpo
 
+
+
 app.use(require('../rutas/index'))
 console.log('Servidor Activo')
 mongoose.connect(process.env.URI_DB, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
