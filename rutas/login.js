@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENTE_GOOGLE);
-const googleMid = require('../middlewares/login').googleMid;
+//const googleMid = require('../middlewares/login').googleMid;
 //Cuerpo
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -61,64 +61,90 @@ async function verify(token) {
 }
 //verify().catch(console.error);
 
-app.post('/google', googleMid, async(req, res) => {
+app.post('/google', async(req, res) => {
+
     let token = req.body.idtoken;
+
     let googleUser = await verify(token)
-        .catch((err) => {
+        .catch(e => {
             return res.status(403).json({
                 ok: false,
-                message: 'Hemos perdido :(',
-                err: err
-            })
-        })
-    Usuario.findOne({ email: googleUser.email }, (err, usuarioDb) => {
+                err: e
+            });
+        });
+
+
+    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
+
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             });
         };
-        if (usuarioDb) {
-            if (usuarioDb.google === false) {
+
+        if (usuarioDB) {
+
+            if (usuarioDB.google === false) {
                 return res.status(400).json({
                     ok: false,
-                    message: {
-                        desc: 'Debe utilizar su auth normal',
-                        error: err
+                    err: {
+                        message: 'Debe de usar su autenticación normal'
                     }
                 });
             } else {
-                let token = jwt.sign({ usuarioDb }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
+                let token = jwt.sign({
+                    usuario: usuarioDB
+                }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
+
+
                 return res.json({
                     ok: true,
-                    usuario: usuarioDb,
-                    token
+                    usuario: usuarioDB,
+                    token,
                 });
-            };
+
+            }
+
         } else {
-            //SI EL USER NO EXISTE
-            let usuario = new Usuario({
-                nombre: googleUser.nombre,
-                email: googleUser.email,
-                google: true,
-                pass: ':)'
-            });
-            usuario.save((err, usuarioDb) => {
-                let token = jwt.sign({ usuarioDb }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
+            // Si el usuario no existe en nuestra base de datos
+            let usuario = new Usuario();
+
+            usuario.nombre = googleUser.nombre;
+            usuario.email = googleUser.email;
+            usuario.google = true;
+            usuario.password = ':)';
+
+            usuario.save((err, usuarioDB) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
+                };
+
+                let token = jwt.sign({
+                    usuario: usuarioDB
+                }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
+
+
                 return res.json({
                     ok: true,
-                    usuario: usuarioDb,
-                    token
+                    usuario: usuarioDB,
+                    token,
                 });
-            })
+
+
+            });
+
         }
 
-    })
 
-    /*res.json({
-        usuario: googleUser
-    })*/
-})
+    });
+
+
+});
 
 //Exports
 module.exports = app
