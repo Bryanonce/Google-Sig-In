@@ -62,89 +62,63 @@ async function verify(token) {
 //verify().catch(console.error);
 
 app.post('/google', async(req, res) => {
-
     let token = req.body.idtoken;
-
     let googleUser = await verify(token)
-        .catch(e => {
+        .catch((err) => {
             return res.status(403).json({
                 ok: false,
-                err: e
-            });
-        });
-
-
-    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
-
+                message: 'Hemos perdido :(',
+                err: err
+            })
+        })
+    Usuario.findOne({ email: googleUser.email }, (err, usuarioDb) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             });
         };
-
-        if (usuarioDB) {
-
-            if (usuarioDB.google === false) {
+        if (usuarioDb) {
+            if (usuarioDb.google === false) {
                 return res.status(400).json({
                     ok: false,
-                    err: {
-                        message: 'Debe de usar su autenticación normal'
+                    message: {
+                        desc: 'Debe utilizar su auth normal',
+                        error: err
                     }
                 });
             } else {
-                let token = jwt.sign({
-                    usuario: usuarioDB
-                }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
-
-
+                let token = jwt.sign({ usuarioDb }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
                 return res.json({
                     ok: true,
-                    usuario: usuarioDB,
-                    token,
+                    usuario: usuarioDb,
+                    token
                 });
-
-            }
-
+            };
         } else {
-            // Si el usuario no existe en nuestra base de datos
-            let usuario = new Usuario();
-
-            usuario.nombre = googleUser.nombre;
-            usuario.email = googleUser.email;
-            usuario.google = true;
-            usuario.password = ':)';
-
-            usuario.save((err, usuarioDB) => {
-
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    });
-                };
-
-                let token = jwt.sign({
-                    usuario: usuarioDB
-                }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
-
-
+            //SI EL USER NO EXISTE
+            let usuario = new Usuario({
+                nombre: googleUser.nombre,
+                email: googleUser.email,
+                google: true,
+                pass: ':)'
+            });
+            usuario.save((err, usuarioDb) => {
+                let token = jwt.sign({ usuarioDb }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
                 return res.json({
                     ok: true,
-                    usuario: usuarioDB,
-                    token,
+                    usuario: usuarioDb,
+                    token
                 });
-
-
-            });
-
+            })
         }
 
+    })
 
-    });
-
-
-});
+    /*res.json({
+        usuario: googleUser
+    })*/
+})
 
 //Exports
 module.exports = app

@@ -6,20 +6,14 @@ const mongoose = require('mongoose');
 const path = require('path');
 //Cuerpo
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
-/*app.use(function(req, res, next) {
-    if (process.env.NODE_ENV === "production") {
-        const reqType = req.headers["x-forwarded-proto"];
-        // if not https redirect to https unless logging in using OAuth
-        if (reqType !== "https") {
-            req.url.indexOf("auth/google") !== -1 ?
-                next() :
-                res.redirect("https://" + req.headers.host + req.url);
-        }
-    } else {
-        next();
-    }
-});*/
 
 app.use(require('../rutas/index'))
 console.log('Servidor Activo')
