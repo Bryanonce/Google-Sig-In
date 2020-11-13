@@ -21,12 +21,12 @@ process.env.SEED = process.env.SEED || 'ahora-es-cuando'
 //=====================
 //     DB Dynamic
 //=====================
-let uriDB;
-if (process.env.NODE_ENV === 'dev') {
-    uriDB = 'mongodb://localhost:27017/tesis';
-} else {
-    uriDB = process.env.MONGO_URI;
-}
+//let uriDB;
+//if (process.env.NODE_ENV === 'dev') {
+uriDB = 'mongodb+srv://complex:R6D9YbvlSwE6Qjri@cluster0.vrxbv.mongodb.net/pruebas';
+//} else {
+//uriDB = process.env.MONGO_URI;
+//}
 process.env.URI_DB = uriDB;
 
 //=====================
