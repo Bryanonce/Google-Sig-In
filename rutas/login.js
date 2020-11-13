@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENTE_GOOGLE);
-//const googleMid = require('../middlewares/login').googleMid;
+
 //Cuerpo
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

@@ -44,6 +44,5 @@ let validarRol = (req, res, next) => {
 //Exports
 module.exports = {
     validacionToken,
-    validarRol,
-    googleMid
+    validarRol
 }
