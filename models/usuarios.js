@@ -33,9 +33,13 @@ let usuarioSchema = new Schema({
         type: Boolean,
         default: false
     },
-    googleSin: {
+    google: {
         type: Boolean,
         default: false
+    },
+    img: {
+        type: String,
+        default: ''
     }
 });
 

@@ -1,5 +1,6 @@
 //Imports
 const jwt = require('jsonwebtoken');
+const Usuario = require('../models/usuarios');
 
 //===================
 //  Validar Token
@@ -40,9 +41,28 @@ let validarRol = (req, res, next) => {
 
 }
 
+//===================
+// Verifica TokenImg
+//===================
+let verificaTokenImg = (req, res, next) => {
+    let token = req.query.token;
+    jwt.verify(token, process.env.SEED, (err, decode) => {
+        if (err) {
+            return res.status(403).json({
+                ok: false,
+                description: 'token muerto',
+                message: err
+            });
+        };
+        req.usuario = decode.usuarioDb;
+        next()
+    })
+}
+
 
 //Exports
 module.exports = {
     validacionToken,
-    validarRol
+    validarRol,
+    verificaTokenImg
 }

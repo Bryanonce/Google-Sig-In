@@ -28,12 +28,13 @@ app.get('/users', [validacionToken, validarRol], (req, res) => {
         })
 })
 
-app.post('/users', [validacionToken, validarRol], (req, res) => {
+app.post('/users', /*[validacionToken, validarRol],*/ (req, res) => {
     let body = req.body;
     let usuario = new Usuario({
         email: body.email,
         pass: bcrypt.hashSync(body.pass, 10),
-        tipo: body.tipo
+        tipo: body.tipo,
+        nombre: body.nombre
     })
     usuario.save((err, usuarioDb) => {
         if (err) {

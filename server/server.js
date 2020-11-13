@@ -8,7 +8,7 @@ const path = require('path');
 
 
 
-app.use(require('../rutas/index'))
+app.use(require('../routes/index'))
 console.log('Servidor Activo')
 mongoose.connect(process.env.URI_DB, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) {
